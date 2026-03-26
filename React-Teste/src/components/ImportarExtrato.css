@@ -1,0 +1,13 @@
+.importar-form { display: flex; gap: 10px; align-items: center; justify-content: space-between; }
+
+.input-arquivo {
+  padding: 8px; border: 1px dashed var(--borda); border-radius: 6px;
+  background-color: var(--bg-fundo); color: var(--texto-secundario); flex: 1;
+}
+
+.btn-enviar-csv {
+  background-color: var(--bg-fundo); color: var(--texto-principal); 
+  border: 1px solid var(--borda); padding: 10px 15px; width: auto;
+}
+.btn-enviar-csv:hover:not(:disabled) { border-color: var(--texto-secundario); }
+.btn-enviar-csv:disabled { opacity: 0.5; cursor: not-allowed; }

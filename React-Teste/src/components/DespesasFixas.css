@@ -1,113 +1,36 @@
-/* Container principal das despesas fixas */
-.despesas-section {
-  border: 1px solid #ccc;
-  padding: 20px;
-  border-radius: 8px;
-  margin-top: 20px;
-  background-color: #fff;
-}
-
-/* Resumo Financeiro */
 .despesas-resumo {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  background-color: #f9f9f9;
-  padding: 15px;
-  border-radius: 8px;
+  display: flex; justify-content: space-between; margin-bottom: 20px;
+  background-color: var(--bg-fundo); padding: 15px;
+  border-radius: 8px; border: 1px solid var(--borda);
 }
+.texto-pago { color: var(--verde-neon); }
+.texto-falta { color: var(--vermelho-neon); }
 
-.texto-pago { color: #27ae60; }
-.texto-falta { color: #e74c3c; }
+.despesas-form { display: flex; gap: 10px; margin-bottom: 20px; }
+.despesas-form button { width: auto; white-space: nowrap; }
 
-/* Formulário */
-.despesas-form {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.btn-adicionar {
-  padding: 10px 15px;
-  background-color: #3498db;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.btn-adicionar:hover {
-  background-color: #2980b9;
-}
-
-/* Lista de Despesas */
-.despesas-lista {
-  list-style: none;
-  padding: 0;
-}
-
+.despesas-lista { list-style: none; padding: 0; margin: 0; }
 .despesa-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  padding: 15px;
-  border-radius: 4px;
-  border: 1px solid #eee;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px; padding: 15px; border-radius: 8px;
+  border: 1px solid var(--borda); background-color: var(--bg-fundo);
 }
 
-/* Variações de fundo da linha da despesa */
-.fundo-pago { background-color: #e6ffe6; }
-.fundo-pendente { background-color: #ffe6e6; }
+.fundo-pago { opacity: 0.6; }
+.fundo-pendente { border-left: 3px solid var(--vermelho-neon); }
 
-/* Nome da despesa */
-.despesa-nome {
-  font-weight: bold;
-  font-size: 1.1rem;
-}
+.despesa-nome { font-weight: bold; font-size: 1rem; }
+.texto-riscado { text-decoration: line-through; color: var(--texto-secundario); }
+.texto-normal { color: var(--texto-principal); }
 
-/* Variações do texto da despesa */
-.texto-riscado {
-  text-decoration: line-through;
-  color: #7f8c8d;
-}
-.texto-normal {
-  text-decoration: none;
-  color: #2c3e50;
-}
-
-/* Botões de Ação (Pago, Não Pago, Lixeira) */
-.despesa-acoes {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
+.despesa-acoes { display: flex; gap: 8px; align-items: center; }
 .btn-acao {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 0.9rem;
-  transition: opacity 0.2s;
-  color: #fff;
+  padding: 6px 10px; border: none; border-radius: 6px; cursor: pointer;
+  font-weight: bold; font-size: 0.8rem; width: auto; color: #000;
 }
-
-.btn-verde { background-color: #2ecc71; }
-.btn-amarelo { background-color: #f1c40f; }
-
+.btn-verde { background-color: var(--verde-neon); }
+.btn-amarelo { background-color: #f59e0b; }
 .btn-lixeira {
-  background-color: transparent;
-  color: #e74c3c;
-  font-size: 1.3rem;
-  padding: 4px;
-  margin-left: 8px;
+  background-color: transparent; font-size: 1.2rem; padding: 4px; width: auto;
 }
-
-/* Classe para botões desativados */
-.btn-desativado {
-  opacity: 0.4;
-  cursor: default;
-}
+.btn-desativado { opacity: 0.3; cursor: not-allowed; }

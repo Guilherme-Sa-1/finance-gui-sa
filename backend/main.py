@@ -1,5 +1,7 @@
 import os
-from fastapi import FastAPI
+import csv # NOVO
+import io  # NOVO
+from fastapi import FastAPI, UploadFile, File # ATUALIZADO
 from fastapi.middleware.cors import CORSMiddleware
 from supabase import create_client, Client
 from dotenv import load_dotenv
@@ -99,3 +101,76 @@ def deletar_despesa(id: int):
 def atualizar_status_despesa(id: int, status: AtualizarStatusDespesa):
     resposta = supabase.table("despesas_fixas").update({"pago": status.pago}).eq("id", id).execute()
     return resposta.data
+
+@app.post("/upload-extrato")
+def importar_extrato(arquivo: UploadFile = File(...)):
+    # Lendo de forma síncrona, igual as outras funções do seu sistema
+    conteudo = arquivo.file.read()
+    
+    try:
+        texto = conteudo.decode("utf-8")
+    except:
+        texto = conteudo.decode("iso-8859-1")
+        
+    primeira_linha = texto.split('\n')[0]
+    delimitador = ';' if ';' in primeira_linha else ','
+    
+    leitor = csv.reader(io.StringIO(texto), delimiter=delimitador)
+    next(leitor, None) # Pula o cabeçalho
+    
+    transacoes_para_salvar = [] # A lista que vai guardar o "lote"
+    erros = []
+    
+    for linha in leitor:
+        if not linha or len(linha) < 3: 
+            continue
+            
+        try:
+            data_str = linha[0].strip()
+            
+            if len(linha) >= 4 and (linha[1].replace('.', '').replace('-', '').isdigit() or ',' in linha[1]):
+                valor_str = linha[1]
+                descricao = linha[3]
+            else:
+                valor_str = linha[3]
+                descricao = linha[2]
+                
+            valor_str = valor_str.replace('R$', '').strip()
+            if ',' in valor_str and '.' not in valor_str:
+                valor_str = valor_str.replace(',', '.')
+                
+            valor_float = float(valor_str)
+            valor_absoluto = abs(valor_float)
+            tipo = "entrada" if valor_float >= 0 else "saida"
+            
+            if "/" in data_str:
+                dia, mes, ano = data_str.split("/")
+                data_formatada = f"{ano}-{mes}-{dia}T12:00:00Z"
+            elif "-" in data_str:
+                data_formatada = f"{data_str}T12:00:00Z"
+            else:
+                continue
+                
+            dados = {
+                "descricao": descricao.strip(),
+                "valor": valor_absoluto,
+                "tipo": tipo,
+                "categoria": "Outros",
+                "data_criacao": data_formatada
+            }
+            
+            # Adiciona na lista em vez de enviar para o banco
+            transacoes_para_salvar.append(dados)
+            
+        except Exception as e:
+            erros.append(f"Erro na linha: {linha}. Detalhe: {e}")
+            
+    # FAZ UMA ÚNICA VIAGEM AO SUPABASE COM TUDO!
+    if transacoes_para_salvar:
+        try:
+            supabase.table("transacoes").insert(transacoes_para_salvar).execute()
+            return {"mensagem": f"Sucesso! {len(transacoes_para_salvar)} transações foram importadas de uma vez."}
+        except Exception as e:
+            return {"mensagem": f"0 transações importadas. Erro no banco de dados: {e}"}
+    else:
+        return {"mensagem": f"Nenhuma transação lida. Erros: {erros[:2]}"}

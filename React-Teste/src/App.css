@@ -1,89 +1,180 @@
-/* Reset básico para tirar margens padrão do navegador */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
+:root {
+  --bg-fundo: #09090b;       
+  --bg-card: #18181b;        
+  --borda: #27272a;          
+  --texto-principal: #fafafa;
+  --texto-secundario: #a1a1aa;
+  --verde-neon: #10b981;     
+  --vermelho-neon: #ef4444;  
+  --azul-botao: #3b82f6;     
+  --raio-borda: 12px;        
 }
 
-/* Fundo da tela todo */
 body {
-  background-color: #f4f7f6;
-}
-
-/* Container principal (centraliza o app na tela) */
-main {
-  max-width: 800px;
-  margin: 40px auto;
+  background-color: var(--bg-fundo);
+  color: var(--texto-principal);
+  font-family: 'Inter', system-ui, sans-serif;
+  margin: 0;
   padding: 20px;
-  color: #333;
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 30px;
-  color: #2c3e50;
+h1, h2, h3 { color: var(--texto-principal); margin-top: 0; }
+.titulo-principal { text-align: center; margin-bottom: 30px; font-size: 2rem; }
+
+/* LAYOUT DASHBOARD (LADO A LADO) */
+.dashboard-container { max-width: 1200px; margin: 0 auto; }
+
+.topo-dashboard {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 24px; background-color: var(--bg-card);
+  padding: 24px; border-radius: var(--raio-borda); border: 1px solid var(--borda);
 }
 
-h2 {
-  margin-bottom: 15px;
-  font-size: 1.2rem;
-  color: #34495e;
+.label-secundaria { color: var(--texto-secundario); font-size: 1rem; margin: 0 0 5px 0; font-weight: normal; }
+.saldo-positivo { color: var(--verde-neon); font-size: 36px; margin: 0; }
+.saldo-negativo { color: var(--vermelho-neon); font-size: 36px; margin: 0; }
+.filtro-mes { text-align: right; }
+
+.grid-dashboard {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start;
 }
 
-/* Estilo para transformar nossas sections em "Cards" (cartões) */
+@media (max-width: 900px) {
+  .grid-dashboard { grid-template-columns: 1fr; }
+  .topo-dashboard { flex-direction: column; gap: 15px; text-align: center; }
+  .filtro-mes { text-align: center; }
+}
+
+/* CARDS E ELEMENTOS COMUNS */
 section {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  margin-bottom: 20px;
+  background-color: var(--bg-card); border: 1px solid var(--borda);
+  border-radius: var(--raio-borda); padding: 24px; margin-bottom: 24px;
 }
 
-/* Deixa os formulários alinhados lado a lado */
-form {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap; /* Se a tela for pequena, joga para a linha de baixo */
-}
-
-/* Estilo dos campos de digitar */
 input, select {
-  padding: 10px;
-  border: 1px solid #ccc;
+  background-color: var(--bg-fundo); color: var(--texto-principal);
+  border: 1px solid var(--borda); border-radius: 6px; padding: 10px;
+  outline: none; width: 100%; box-sizing: border-box;
+}
+input:focus, select:focus { border-color: var(--azul-botao); }
+
+button {
+  background-color: var(--azul-botao); color: white; border: none;
+  border-radius: 6px; padding: 10px 16px; font-weight: bold;
+  cursor: pointer; transition: opacity 0.2s; width: 100%;
+}
+button:hover { opacity: 0.8; }
+
+/* FORMS E EXTRATO */
+.form-transacao { display: flex; flex-direction: column; gap: 10px; }
+.linha-inputs { display: flex; gap: 10px; }
+
+ul { list-style: none; padding: 0; margin: 0; }
+.item-extrato {
+  display: flex; justify-content: space-between; align-items: center;
+  background-color: var(--bg-fundo); border: 1px solid var(--borda);
+  padding: 15px; border-radius: 8px; margin-bottom: 10px;
+}
+.info-extrato strong { display: block; font-size: 1.05rem; margin-bottom: 4px; }
+.tag-categoria {
+  font-size: 0.75rem; background-color: var(--borda); padding: 2px 8px;
+  border-radius: 12px; color: var(--texto-secundario);
+}
+.acoes-extrato { display: flex; align-items: center; gap: 15px; }
+.valor-positivo { font-weight: bold; color: var(--verde-neon); }
+.valor-neutro { font-weight: bold; color: var(--texto-principal); }
+.texto-vazio { text-align: center; color: var(--texto-secundario); }
+
+.btn-excluir {
+  background-color: transparent; border: none; font-size: 1.2rem;
+  padding: 0; width: auto; color: var(--texto-secundario);
+}
+.btn-excluir:hover { opacity: 1; filter: grayscale(0); }
+
+/* --- SCROLL DO EXTRATO --- */
+.lista-extrato {
+  max-height: 400px; /* Altura máxima da caixa */
+  overflow-y: auto;  /* Ativa o scroll vertical automático */
+  padding-right: 10px; /* Dá um espacinho para a barra não colar no texto */
+}
+/* Deixando a barra de rolagem com design moderno (Dark Mode) */
+.lista-extrato::-webkit-scrollbar {
+  width: 6px;
+}
+.lista-extrato::-webkit-scrollbar-track {
+  background: var(--bg-fundo);
   border-radius: 4px;
-  flex: 1; 
-  min-width: 150px;
-  font-size: 1rem;
+}
+.lista-extrato::-webkit-scrollbar-thumb {
+  background: var(--borda);
+  border-radius: 4px;
+}
+.lista-extrato::-webkit-scrollbar-thumb:hover {
+  background: var(--texto-secundario);
 }
 
-/* Estilo do botão principal */
-button[type="submit"] {
-  padding: 10px 20px;
-  background-color: #2ecc71;
-  color: white;
-  border: none;
-  border-radius: 4px;
+/* --- CUSTOMIZANDO O CALENDÁRIO PARA DARK MODE --- */
+.input-calendario {
+  background-color: var(--bg-fundo);
+  color: var(--verde-neon);
+  border: 1px solid var(--borda);
+  border-radius: 6px;
+  padding: 10px;
+  outline: none;
+  width: 140px;
+  text-align: center;
   cursor: pointer;
   font-weight: bold;
-  transition: 0.3s;
+  font-size: 1.1rem;
 }
 
-button[type="submit"]:hover {
-  background-color: #27ae60;
+.input-calendario:focus {
+  border-color: var(--azul-botao);
 }
 
-/* Estilo da lista do extrato */
-ul {
-  list-style-type: none;
+/* O pop-up do calendário */
+.react-datepicker {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--borda) !important;
+  font-family: 'Inter', sans-serif !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 
-li {
-  background-color: #fdfdfd;
-  margin-bottom: 10px;
-  padding: 15px;
-  border-radius: 4px;
-  border: 1px solid #eee;
-  display: flex;
-  align-items: center;
+/* O cabeçalho (onde fica o ano) */
+.react-datepicker__header {
+  background-color: var(--bg-fundo) !important;
+  border-bottom: 1px solid var(--borda) !important;
+  border-radius: 8px 8px 0 0 !important;
+}
+
+.react-datepicker__current-month {
+  color: var(--texto-principal) !important;
+}
+
+/* Os botões dos meses */
+.react-datepicker__month-text {
+  color: var(--texto-principal) !important;
+  border-radius: 4px !important;
+  padding: 5px !important;
+}
+
+.react-datepicker__month-text:hover {
+  background-color: var(--borda) !important;
+}
+
+/* O mês selecionado */
+.react-datepicker__month--selected,
+.react-datepicker__month-text--keyboard-selected {
+  background-color: var(--azul-botao) !important;
+  color: white !important;
+  font-weight: bold !important;
+}
+
+/* As setinhas para mudar de ano */
+.react-datepicker__navigation-icon::before {
+  border-color: var(--texto-secundario) !important;
+}
+.react-datepicker__navigation:hover *::before {
+  border-color: var(--texto-principal) !important;
 }

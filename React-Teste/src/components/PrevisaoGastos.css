@@ -1,61 +1,26 @@
-.previsao-section {
-  border: 1px solid #3498db;
-  padding: 20px;
-  border-radius: 8px;
-  margin-top: 20px;
-  background-color: #ebf5fb; /* Azul bem clarinho */
-}
+.previsao-section h2 { margin-bottom: 20px; }
 
 .previsao-grid {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-bottom: 20px;
-  text-align: center;
+  display: flex; justify-content: space-between; gap: 15px; margin-bottom: 20px;
 }
 
 .card-valor {
-  background-color: #fff;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  flex: 1;
-  min-width: 150px;
+  background-color: var(--bg-fundo); padding: 15px; border-radius: 8px;
+  border: 1px solid var(--borda); flex: 1; text-align: center;
 }
-
-.card-valor h3 {
-  font-size: 0.9rem;
-  color: #7f8c8d;
-  margin-bottom: 5px;
-}
-
-.card-valor p {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #2c3e50;
-}
+.card-valor h3 { font-size: 0.85rem; color: var(--texto-secundario); margin-bottom: 8px; }
+.card-valor p { font-size: 1.2rem; font-weight: bold; color: var(--texto-principal); margin: 0; }
 
 .input-receitas {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #bdc3c7;
-  border-radius: 4px;
-  font-size: 1.1rem;
-  text-align: center;
-  color: #27ae60;
-  font-weight: bold;
+  width: 100%; padding: 8px; border: none; border-bottom: 1px solid var(--borda);
+  border-radius: 0; background-color: transparent; color: var(--verde-neon);
+  text-align: center; font-weight: bold; outline: none; box-sizing: border-box;
 }
 
 .resultado-previsao {
-  text-align: center;
-  margin-top: 20px;
-  padding: 20px;
-  border-radius: 8px;
-  background-color: #fff;
-  font-size: 1.5rem;
-  font-weight: bold;
+  text-align: center; margin-top: 20px; padding: 15px; border-radius: 8px;
+  font-size: 1.2rem; font-weight: bold; background-color: var(--bg-fundo);
 }
 
-.sobra { color: #27ae60; border: 2px solid #27ae60; }
-.falta { color: #e74c3c; border: 2px solid #e74c3c; }
+.sobra { color: var(--verde-neon); border: 1px dashed var(--verde-neon); }
+.falta { color: var(--vermelho-neon); border: 1px dashed var(--vermelho-neon); }
