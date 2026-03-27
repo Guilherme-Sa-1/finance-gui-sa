@@ -1,36 +1,180 @@
+/* ─── DESPESAS FIXAS ──────────────────────────────── */
+
 .despesas-resumo {
-  display: flex; justify-content: space-between; margin-bottom: 20px;
-  background-color: var(--bg-fundo); padding: 15px;
-  border-radius: 8px; border: 1px solid var(--borda);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
 }
-.texto-pago { color: var(--verde-neon); }
-.texto-falta { color: var(--vermelho-neon); }
 
-.despesas-form { display: flex; gap: 10px; margin-bottom: 20px; }
-.despesas-form button { width: auto; white-space: nowrap; }
+.resumo-card {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  text-align: center;
+  transition: border-color 0.2s;
+}
 
+.resumo-card:hover { border-color: var(--border-strong); }
+
+.resumo-card .resumo-label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.resumo-card .resumo-valor {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 400;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.resumo-card.pago .resumo-valor { color: var(--positive); }
+.resumo-card.falta .resumo-valor { color: var(--negative); }
+
+/* Form */
+.despesas-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.despesas-form button {
+  background: linear-gradient(135deg, var(--gold-bright), var(--gold-mid));
+  color: #0a0a0f;
+  font-weight: 600;
+  width: auto;
+  white-space: nowrap;
+  padding: 11px 18px;
+  font-size: 0.75rem;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 10px rgba(212, 168, 67, 0.18);
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.despesas-form button:hover {
+  box-shadow: 0 4px 18px rgba(212, 168, 67, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Lista */
 .despesas-lista { list-style: none; padding: 0; margin: 0; }
+
 .despesa-item {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 10px; padding: 15px; border-radius: 8px;
-  border: 1px solid var(--borda); background-color: var(--bg-fundo);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg-raised);
+  transition: all 0.2s ease;
+  gap: 10px;
 }
 
-.fundo-pago { opacity: 0.6; }
-.fundo-pendente { border-left: 3px solid var(--vermelho-neon); }
+.despesa-item:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-strong);
+}
 
-.despesa-nome { font-weight: bold; font-size: 1rem; }
-.texto-riscado { text-decoration: line-through; color: var(--texto-secundario); }
-.texto-normal { color: var(--texto-principal); }
+.fundo-pago {
+  opacity: 0.45;
+  border-color: transparent;
+  background: var(--bg-deep);
+}
 
-.despesa-acoes { display: flex; gap: 8px; align-items: center; }
+.fundo-pendente {
+  border-left: 2px solid var(--negative);
+}
+
+.despesa-nome {
+  font-size: 0.88rem;
+  font-weight: 400;
+  flex: 1;
+  min-width: 0;
+}
+
+.texto-riscado {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.texto-normal { color: var(--text-primary); }
+
+/* Ações */
+.despesa-acoes {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 .btn-acao {
-  padding: 6px 10px; border: none; border-radius: 6px; cursor: pointer;
-  font-weight: bold; font-size: 0.8rem; width: auto; color: #000;
+  padding: 5px 12px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  width: auto;
+  transition: all 0.2s;
 }
-.btn-verde { background-color: var(--verde-neon); }
-.btn-amarelo { background-color: #f59e0b; }
+
+.btn-verde {
+  background: var(--positive-dim);
+  color: var(--positive);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+.btn-verde:hover {
+  background: rgba(34, 197, 94, 0.18);
+  transform: translateY(-1px);
+}
+
+.btn-amarelo {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+.btn-amarelo:hover {
+  background: rgba(245, 158, 11, 0.18);
+  transform: translateY(-1px);
+}
+
 .btn-lixeira {
-  background-color: transparent; font-size: 1.2rem; padding: 4px; width: auto;
+  background: transparent;
+  border: 1px solid transparent;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
 }
-.btn-desativado { opacity: 0.3; cursor: not-allowed; }
+.btn-lixeira:hover {
+  background: var(--negative-dim);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: var(--negative);
+  opacity: 1;
+  transform: none;
+}
+
+.btn-desativado {
+  opacity: 0.25 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}

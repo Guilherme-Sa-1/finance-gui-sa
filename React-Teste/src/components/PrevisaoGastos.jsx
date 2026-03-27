@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react'
 import './PrevisaoGastos.css'
 
-// Recebendo o gatilho aqui
 export default function PrevisaoGastos({ gatilho }) {
   const [saldoAtual, setSaldoAtual] = useState(0)
   const [contasAPagar, setContasAPagar] = useState(0)
-  const [receitasFuturas, setReceitasFuturas] = useState('') 
+  const [receitasFuturas, setReceitasFuturas] = useState('')
 
-  // Escutando o gatilho aqui
   useEffect(() => {
     carregarDados()
   }, [gatilho])
@@ -18,20 +16,17 @@ export default function PrevisaoGastos({ gatilho }) {
         fetch('http://127.0.0.1:8000/transacoes'),
         fetch('http://127.0.0.1:8000/despesas')
       ])
-
       const transacoes = await resTransacoes.json()
       const despesas = await resDespesas.json()
 
-      const saldo = transacoes.reduce((acc, t) => {
-        return t.tipo === 'entrada' ? acc + t.valor : acc - t.valor
-      }, 0)
+      const saldo = transacoes.reduce((acc, t) =>
+        t.tipo === 'entrada' ? acc + t.valor : acc - t.valor, 0)
       setSaldoAtual(saldo)
 
       const pendentes = despesas
         .filter(d => !d.pago)
         .reduce((acc, d) => acc + d.valor, 0)
       setContasAPagar(pendentes)
-
     } catch (erro) {
       console.error("Erro ao carregar dados para previsão:", erro)
     }
@@ -41,23 +36,23 @@ export default function PrevisaoGastos({ gatilho }) {
   const previsaoFinal = saldoAtual + valorReceitasFuturas - contasAPagar
 
   return (
-    <section className="previsao-section">
-      <h2 style={{ textAlign: 'center', marginBottom: '20px', color: '#2980b9' }}>
-        🔮 Previsão do Mês
-      </h2>
+    <section>
+      <h2>🔮 Previsão do Mês</h2>
 
       <div className="previsao-grid">
         <div className="card-valor">
           <h3>Saldo Atual</h3>
-          <p>R$ {saldoAtual.toFixed(2)}</p>
+          <p style={{ color: saldoAtual >= 0 ? 'var(--positive)' : 'var(--negative)' }}>
+            R$ {saldoAtual.toFixed(2)}
+          </p>
         </div>
 
         <div className="card-valor">
-          <h3>Ainda vou receber (R$)</h3>
-          <input 
-            type="number" 
+          <h3>Vou receber (R$)</h3>
+          <input
+            type="number"
             className="input-receitas"
-            placeholder="Ex: 1500.00"
+            placeholder="0,00"
             value={receitasFuturas}
             onChange={(e) => setReceitasFuturas(e.target.value)}
             step="0.01"
@@ -66,22 +61,20 @@ export default function PrevisaoGastos({ gatilho }) {
 
         <div className="card-valor">
           <h3>Falta Pagar</h3>
-          <p style={{ color: '#e74c3c' }}>- R$ {contasAPagar.toFixed(2)}</p>
+          <p style={{ color: 'var(--negative)' }}>
+            − R$ {contasAPagar.toFixed(2)}
+          </p>
         </div>
       </div>
 
       <div className={`resultado-previsao ${previsaoFinal >= 0 ? 'sobra' : 'falta'}`}>
-        {previsaoFinal >= 0 ? 'Vai sobrar:' : 'Vai faltar:'} R$ {Math.abs(previsaoFinal).toFixed(2)}
+        {previsaoFinal >= 0 ? '▲ Vai sobrar' : '▼ Vai faltar'}
+        {' '}R$ {Math.abs(previsaoFinal).toFixed(2)}
       </div>
 
-      <div style={{ textAlign: 'center', marginTop: '15px' }}>
-         <button 
-            onClick={carregarDados} 
-            style={{ padding: '8px 15px', cursor: 'pointer', borderRadius: '4px', border: 'none', backgroundColor: '#3498db', color: 'white' }}
-         >
-            🔄 Atualizar Valores
-         </button>
-      </div>
+      <button className="btn-atualizar" onClick={carregarDados}>
+        ↻ Atualizar
+      </button>
     </section>
   )
 }

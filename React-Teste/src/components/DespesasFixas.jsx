@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react'
-import './DespesasFixas.css' 
+import './DespesasFixas.css'
 
-// 1. Recebendo o "gatilho" do App.jsx aqui na primeira linha
 export default function DespesasFixas({ gatilho }) {
   const [despesas, setDespesas] = useState([])
   const [nome, setNome] = useState('')
   const [valor, setValor] = useState('')
 
-  // 2. Colocando o gatilho aqui dentro para ele recarregar a tela sozinho
   useEffect(() => {
     buscarDespesas()
   }, [gatilho])
@@ -26,24 +24,13 @@ export default function DespesasFixas({ gatilho }) {
     e.preventDefault()
     if (!nome || !valor) return
 
-    const novaDespesa = {
-      nome: nome,
-      valor: parseFloat(valor),
-      pago: false
-    }
-
     try {
       const resposta = await fetch('http://127.0.0.1:8000/despesas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(novaDespesa)
+        body: JSON.stringify({ nome, valor: parseFloat(valor), pago: false })
       })
-
-      if (resposta.ok) {
-        buscarDespesas()
-        setNome('')
-        setValor('')
-      }
+      if (resposta.ok) { buscarDespesas(); setNome(''); setValor('') }
     } catch (erro) {
       console.error("Erro ao salvar despesa:", erro)
     }
@@ -51,12 +38,8 @@ export default function DespesasFixas({ gatilho }) {
 
   const removerDespesa = async (id) => {
     try {
-      const resposta = await fetch(`http://127.0.0.1:8000/despesas/${id}`, {
-        method: 'DELETE'
-      })
-      if (resposta.ok) {
-        buscarDespesas()
-      }
+      const resposta = await fetch(`http://127.0.0.1:8000/despesas/${id}`, { method: 'DELETE' })
+      if (resposta.ok) buscarDespesas()
     } catch (erro) {
       console.error("Erro ao deletar despesa:", erro)
     }
@@ -67,11 +50,9 @@ export default function DespesasFixas({ gatilho }) {
       const resposta = await fetch(`http://127.0.0.1:8000/despesas/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ pago: novoStatus }) 
+        body: JSON.stringify({ pago: novoStatus })
       })
-      if (resposta.ok) {
-        buscarDespesas()
-      }
+      if (resposta.ok) buscarDespesas()
     } catch (erro) {
       console.error("Erro ao atualizar status:", erro)
     }
@@ -82,63 +63,65 @@ export default function DespesasFixas({ gatilho }) {
   const totalFalta = totalGeral - totalPago
 
   return (
-    <section className="despesas-section">
-      <h2>📌 Despesas Fixas do Mês</h2>
-      
+    <section>
+      <h2>📌 Despesas Fixas</h2>
+
+      {/* Resumo com cards individuais */}
       <div className="despesas-resumo">
-        <p><strong>Total:</strong> R$ {totalGeral.toFixed(2)}</p>
-        <p className="texto-pago"><strong>Pago:</strong> R$ {totalPago.toFixed(2)}</p>
-        <p className="texto-falta"><strong>Falta:</strong> R$ {totalFalta.toFixed(2)}</p>
+        <div className="resumo-card">
+          <span className="resumo-label">Total</span>
+          <p className="resumo-valor">R$ {totalGeral.toFixed(2)}</p>
+        </div>
+        <div className="resumo-card pago">
+          <span className="resumo-label">Pago</span>
+          <p className="resumo-valor">R$ {totalPago.toFixed(2)}</p>
+        </div>
+        <div className="resumo-card falta">
+          <span className="resumo-label">Falta</span>
+          <p className="resumo-valor">R$ {totalFalta.toFixed(2)}</p>
+        </div>
       </div>
 
       <form onSubmit={adicionarDespesa} className="despesas-form">
-        <input 
-          type="text" placeholder="Nome da Conta (ex: Aluguel)" 
-          value={nome} onChange={(e) => setNome(e.target.value)} 
-          required
+        <input
+          type="text" placeholder="Nome da conta"
+          value={nome} onChange={(e) => setNome(e.target.value)} required
         />
-        <input 
+        <input
           type="number" placeholder="Valor" step="0.01"
-          value={valor} onChange={(e) => setValor(e.target.value)} 
-          required
+          value={valor} onChange={(e) => setValor(e.target.value)} required
         />
-        <button type="submit" className="btn-adicionar">
-          Adicionar Conta
-        </button>
+        <button type="submit">Adicionar</button>
       </form>
 
       <ul className="despesas-lista">
         {despesas.map(despesa => (
           <li key={despesa.id} className={`despesa-item ${despesa.pago ? 'fundo-pago' : 'fundo-pendente'}`}>
-            
             <span className={`despesa-nome ${despesa.pago ? 'texto-riscado' : 'texto-normal'}`}>
-              {despesa.nome} - R$ {despesa.valor.toFixed(2)}
+              {despesa.nome}
+              <span style={{ color: 'var(--text-secondary)', marginLeft: '8px', fontSize: '0.82rem' }}>
+                R$ {despesa.valor.toFixed(2)}
+              </span>
             </span>
 
             <div className="despesa-acoes">
-              <button 
+              <button
                 onClick={() => alternarStatus(despesa.id, true)}
                 className={`btn-acao btn-verde ${despesa.pago ? 'btn-desativado' : ''}`}
                 disabled={despesa.pago}
-              >
-                Pago
-              </button>
+              >Pago</button>
 
-              <button 
+              <button
                 onClick={() => alternarStatus(despesa.id, false)}
                 className={`btn-acao btn-amarelo ${!despesa.pago ? 'btn-desativado' : ''}`}
                 disabled={!despesa.pago}
-              >
-                Não Pago
-              </button>
+              >Desfazer</button>
 
-              <button 
-                onClick={() => removerDespesa(despesa.id)} 
-                title="Excluir"
+              <button
+                onClick={() => removerDespesa(despesa.id)}
                 className="btn-acao btn-lixeira"
-              >
-                🗑️
-              </button>
+                title="Excluir"
+              >🗑️</button>
             </div>
           </li>
         ))}

@@ -1,26 +1,126 @@
-.previsao-section h2 { margin-bottom: 20px; }
+/* ─── PREVISÃO DE GASTOS ──────────────────────────── */
+
+.previsao-section h2 {
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  margin-bottom: 22px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
 
 .previsao-grid {
-  display: flex; justify-content: space-between; gap: 15px; margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .card-valor {
-  background-color: var(--bg-fundo); padding: 15px; border-radius: 8px;
-  border: 1px solid var(--borda); flex: 1; text-align: center;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  padding: 16px;
+  border-radius: var(--radius-md);
+  text-align: center;
+  transition: border-color 0.2s;
 }
-.card-valor h3 { font-size: 0.85rem; color: var(--texto-secundario); margin-bottom: 8px; }
-.card-valor p { font-size: 1.2rem; font-weight: bold; color: var(--texto-principal); margin: 0; }
+
+.card-valor:hover { border-color: var(--border-strong); }
+
+.card-valor h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+}
+
+.card-valor p {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  margin: 0;
+}
 
 .input-receitas {
-  width: 100%; padding: 8px; border: none; border-bottom: 1px solid var(--borda);
-  border-radius: 0; background-color: transparent; color: var(--verde-neon);
-  text-align: center; font-weight: bold; outline: none; box-sizing: border-box;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--gold-border);
+  border-radius: 0;
+  padding: 4px 2px;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: var(--gold-bright);
+  text-align: center;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
 }
 
+.input-receitas::placeholder {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.input-receitas:focus {
+  border-bottom-color: var(--gold-bright);
+  box-shadow: none;
+}
+
+/* Resultado */
 .resultado-previsao {
-  text-align: center; margin-top: 20px; padding: 15px; border-radius: 8px;
-  font-size: 1.2rem; font-weight: bold; background-color: var(--bg-fundo);
+  text-align: center;
+  margin-top: 16px;
+  padding: 18px;
+  border-radius: var(--radius-md);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  border: 1px dashed;
+  transition: all 0.3s ease;
 }
 
-.sobra { color: var(--verde-neon); border: 1px dashed var(--verde-neon); }
-.falta { color: var(--vermelho-neon); border: 1px dashed var(--vermelho-neon); }
+.sobra {
+  color: var(--positive);
+  border-color: rgba(34, 197, 94, 0.25);
+  background: var(--positive-dim);
+}
+
+.falta {
+  color: var(--negative);
+  border-color: rgba(239, 68, 68, 0.25);
+  background: var(--negative-dim);
+}
+
+/* Botão atualizar */
+.btn-atualizar {
+  display: block;
+  margin: 16px auto 0;
+  padding: 9px 20px;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  width: auto;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  transition: all 0.2s;
+}
+
+.btn-atualizar:hover {
+  border-color: var(--gold-border);
+  color: var(--gold-bright);
+  background: var(--gold-ghost);
+  transform: none;
+  box-shadow: none;
+}
